@@ -1,0 +1,8 @@
+name: Main
+main: com.erigitic.main.MobTalk
+version: 1.0.0
+
+commands:
+    test:
+        description: Test command
+        usage: /test
