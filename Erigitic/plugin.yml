@@ -3,6 +3,9 @@ main: com.erigitic.main.MobTalk
 version: 1.0.0
 
 commands:
-    test:
-        description: Test command
-        usage: /test
+    create:
+        description: Create MobTalk mob
+        usage: /create
+    message:
+        description: Set mob message
+        usage: /message <message>
