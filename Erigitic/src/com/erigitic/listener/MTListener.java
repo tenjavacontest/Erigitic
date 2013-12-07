@@ -2,23 +2,24 @@ package com.erigitic.listener;
 
 import com.erigitic.main.FileReader;
 import com.erigitic.main.MobTalk;
-import net.minecraft.server.v1_7_R1.EntityVillager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
 
 public class MTListener implements Listener {
 
     private boolean editing;
     private String mobName;
+
+    private HashMap<String, Player> players = new HashMap<String, Player>();
 
     private MobTalk plugin;
     private FileReader reader;
@@ -44,27 +45,51 @@ public class MTListener implements Listener {
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent event) {
         Player p = event.getPlayer();
-        Villager v = (Villager) event.getRightClicked();
 
-        if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() == true && p.isOp()) {
-
-            p.sendMessage(ChatColor.DARK_GRAY + "----MobTalk Edit Mode----");
-            p.sendMessage(ChatColor.DARK_GRAY + "-Commands-");
-            p.sendMessage(ChatColor.DARK_GRAY + "/message <message> - Sets the message displayed when clicked.");
-
-            editing = true;
+        if (event.getRightClicked() instanceof  Villager) {
+            Villager v = (Villager) event.getRightClicked();
             mobName = v.getCustomName();
 
-            event.setCancelled(true);
 
-        } else if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null) {
+            if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() == true && p.isOp()) {
 
-            mobName = v.getCustomName();
+                p.sendMessage(ChatColor.GRAY + "You are now editing " + v.getCustomName());
+                p.sendMessage("");
+                p.sendMessage(ChatColor.GRAY + "/message <message> - " + ChatColor.RED + "Sets the entities message.");
+                p.sendMessage(ChatColor.GRAY + "/item <item> - " + ChatColor.RED + "Set item to give.");
 
-            p.sendMessage(ChatColor.GRAY + reader.readMobMessage(mobName, plugin.getMobLoc()));
 
-            event.setCancelled(true);
+                editing = true;
+                mobName = v.getCustomName();
 
+                event.setCancelled(true);
+
+            } else if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && (!players.containsValue(p) || !players.containsKey(mobName) || !players.get(mobName).equals(p) )) {
+
+                mobName = v.getCustomName();
+
+                p.sendMessage(ChatColor.RED + mobName + ": " + ChatColor.GRAY + reader.readMobMessage(mobName, plugin.getMobLoc()));
+
+                try {
+
+                    p.getInventory().addItem(new ItemStack(reader.readMobItem(mobName + "i", plugin.getMobLoc())));
+                    players.put(mobName, p);
+
+                } catch (IllegalArgumentException e) {
+
+                }
+
+                event.setCancelled(true);
+
+            } else if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && players.get(mobName).equals(p)) {
+
+                mobName = v.getCustomName();
+
+                p.sendMessage(ChatColor.RED + mobName + ": " + ChatColor.GRAY + reader.readMobMessage(mobName, plugin.getMobLoc()));
+
+                event.setCancelled(true);
+
+            }
         }
 
     }

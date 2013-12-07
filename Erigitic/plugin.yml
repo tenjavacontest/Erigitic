@@ -9,3 +9,6 @@ commands:
     message:
         description: Set mob message
         usage: /message <message>
+    item:
+        description: Set mob item
+        usage: /item <itemid>
