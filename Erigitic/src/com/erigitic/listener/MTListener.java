@@ -3,6 +3,7 @@ package com.erigitic.listener;
 import com.erigitic.main.FileReader;
 import com.erigitic.main.MobTalk;
 import net.minecraft.server.v1_7_R1.EntityVillager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -43,37 +44,25 @@ public class MTListener implements Listener {
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent event) {
         Player p = event.getPlayer();
+        Villager v = (Villager) event.getRightClicked();
 
-        if (event.getRightClicked().getType() == EntityType.VILLAGER && p.isSneaking() == true && p.isOp()) {
+        if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() == true && p.isOp()) {
 
-            p.sendMessage("----MobTalk Edit Mode----");
-            p.sendMessage("-Commands-");
-            p.sendMessage("/message <message> - Sets the message displayed when clicked.");
+            p.sendMessage(ChatColor.DARK_GRAY + "----MobTalk Edit Mode----");
+            p.sendMessage(ChatColor.DARK_GRAY + "-Commands-");
+            p.sendMessage(ChatColor.DARK_GRAY + "/message <message> - Sets the message displayed when clicked.");
 
             editing = true;
-            Villager v = (Villager) event.getRightClicked();
             mobName = v.getCustomName();
 
             event.setCancelled(true);
 
-        } else if (event.getRightClicked().getType() == EntityType.VILLAGER) {
+        } else if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null) {
 
-            p.sendMessage(reader.readMobMessage(mobName, plugin.getMobLoc()));
+            mobName = v.getCustomName();
 
-            event.setCancelled(true);
+            p.sendMessage(ChatColor.GRAY + reader.readMobMessage(mobName, plugin.getMobLoc()));
 
-        }
-
-    }
-
-    public void onChatSend(AsyncPlayerChatEvent event) {
-
-        Player p = event.getPlayer();
-        String msg = event.getMessage();
-
-        if (editing == true) {
-
-            editing = false;
             event.setCancelled(true);
 
         }
