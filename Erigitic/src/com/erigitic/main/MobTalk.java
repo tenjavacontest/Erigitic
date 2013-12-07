@@ -68,7 +68,7 @@ public class MobTalk extends JavaPlugin {
                 Villager v = world.spawn(loc, Villager.class);
 
                 v.setCustomName(args[0]);
-                reader.writeMobMessage(args[0], "", mobLoc);
+                reader.writeMobMessage(args[0], "No message set", mobLoc);
 
                 v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 999999, 128));
                 v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 999999, 6));
