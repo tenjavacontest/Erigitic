@@ -2,11 +2,13 @@ package com.erigitic.main;
 
 import com.erigitic.listener.MTListener;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -77,8 +79,23 @@ public class MobTalk extends JavaPlugin {
         } else if (cmdLabel.equalsIgnoreCase("message")) {
 
             if (args[0] != null) {
+                String msg = args[0];
 
-                reader.writeMobMessage(mtListener.getMobName(), args[0], mobLoc);
+                for (int i = 1; i < args.length; i++) {
+
+                    msg += " " + args[i];
+
+                }
+
+                reader.writeMobMessage(mtListener.getMobName(), msg, mobLoc);
+
+            }
+
+        } else if (cmdLabel.equalsIgnoreCase("item")) {
+
+            if (args[0] != null) {
+
+                reader.writeMobItem(mtListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
 
             }
 
