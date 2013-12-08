@@ -1,5 +1,5 @@
-name: Main
-main: com.erigitic.main.MobTalk
+name: VillagerTalk
+main: com.erigitic.main.VillagerTalk
 version: 1.0.0
 
 commands:

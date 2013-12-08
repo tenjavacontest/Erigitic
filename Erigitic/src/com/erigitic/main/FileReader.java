@@ -13,9 +13,9 @@ import java.util.Properties;
 
 public class FileReader {
 
-    private MobTalk plugin;
+    private VillagerTalk plugin;
 
-    public FileReader(MobTalk plugin) {
+    public FileReader(VillagerTalk plugin) {
 
         this.plugin = plugin;
 

@@ -1,16 +1,15 @@
 package com.erigitic.main;
 
-import com.erigitic.listener.MTListener;
+import com.erigitic.listener.VTListener;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -20,21 +19,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class MobTalk extends JavaPlugin {
+public class VillagerTalk extends JavaPlugin {
 
     private final String VERSION = "Version 1.0.0";
-    private final String mainDir = "plugins/MobTalk/";
+    private final String mainDir = "plugins/VillagerTalk/";
 
     private File mobLoc = new File(mainDir + "MobLoc.loc");
 
-    private MTListener mtListener;
+    private VTListener VTListener;
     private FileReader reader;
 
     public void onEnable() {
 
         PluginManager pm = getServer().getPluginManager();
 
-        getLogger().info("MobTalk " + VERSION + " Successfully Enabled.");
+        getLogger().info("VillagerTalk " + VERSION + " Successfully Enabled.");
 
         //Creates a file for storing mob locations
         new File(mainDir).mkdir();
@@ -49,21 +48,22 @@ public class MobTalk extends JavaPlugin {
         }
 
         reader = new FileReader(this);
-        mtListener = new MTListener(this, reader);
+        VTListener = new VTListener(this, reader);
 
-        pm.registerEvents(mtListener, this);
+        pm.registerEvents(VTListener, this);
 
     }
 
     public void onDisable() {
 
-        getLogger().info("MobTalk " + VERSION + " Successfully Disabled.");
+        getLogger().info("VillagerTalk " + VERSION + " Successfully Disabled.");
 
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
 
         Player p = (Player) sender;
+
 
         if (cmdLabel.equalsIgnoreCase("create")) {//Spawns mob. Will allow for sender to choose mob of choice
 
@@ -78,11 +78,15 @@ public class MobTalk extends JavaPlugin {
 
                 v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 999999, 128));
                 v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 999999, 6));
+            } else {
+
+                p.sendMessage(ChatColor.RED + "The correct usage is /create <name>");
+
             }
 
         } else if (cmdLabel.equalsIgnoreCase("message")) {
 
-            if (args[0] != null) {
+            if (args.length >= 1) {
                 String msg = args[0];
 
                 for (int i = 1; i < args.length; i++) {
@@ -91,25 +95,31 @@ public class MobTalk extends JavaPlugin {
 
                 }
 
-                reader.writeMobMessage(mtListener.getMobName(), msg, mobLoc);
+                reader.writeMobMessage(VTListener.getMobName(), msg, mobLoc);
+
+            }  else {
+
+                p.sendMessage(ChatColor.RED + "The correct usage is /message <message>");
 
             }
 
         } else if (cmdLabel.equalsIgnoreCase("item")) {
 
-            if (args[0] != null) {
+            if (args.length == 1) {
 
-                reader.writeMobItem(mtListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
+                reader.writeMobItem(VTListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
+
+            }  else {
+
+                p.sendMessage(ChatColor.RED + "The correct usage is /item <item>.");
 
             }
 
         } else if (cmdLabel.equalsIgnoreCase("remove")) {
 
-
-            if (args[0] != null) {
+            if (args.length == 1) {
 
                 Location loc = reader.readMobLoc(args[0], mobLoc);
-                p.sendMessage("" + loc);
                 List<Entity> entityList = loc.getWorld().getEntities();
 
                 for (int i = 0; i < entityList.size(); i++) {
@@ -128,6 +138,10 @@ public class MobTalk extends JavaPlugin {
                     }
 
                 }
+
+            }  else {
+
+                p.sendMessage(ChatColor.RED + "The correct usage is /remove <name>");
 
             }
 

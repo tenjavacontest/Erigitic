@@ -1,7 +1,7 @@
 package com.erigitic.listener;
 
 import com.erigitic.main.FileReader;
-import com.erigitic.main.MobTalk;
+import com.erigitic.main.VillagerTalk;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -14,17 +14,17 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class MTListener implements Listener {
+public class VTListener implements Listener {
 
     private boolean editing;
     private String mobName;
 
     private HashMap<String, Player> players = new HashMap<String, Player>();
 
-    private MobTalk plugin;
+    private VillagerTalk plugin;
     private FileReader reader;
 
-    public MTListener(MobTalk plugin, FileReader reader) {
+    public VTListener(VillagerTalk plugin, FileReader reader) {
 
         this.plugin = plugin;
         this.reader = reader;
@@ -32,7 +32,7 @@ public class MTListener implements Listener {
     }
 
     @EventHandler
-    public void onMobDamage(EntityDamageEvent event) {//Prevents MobTalk mobs from being damaged
+    public void onMobDamage(EntityDamageEvent event) {//Prevents VillagerTalk mobs from being damaged
 
         if (event.getEntity().getType() == EntityType.VILLAGER) {
 
@@ -51,13 +51,13 @@ public class MTListener implements Listener {
             mobName = v.getCustomName();
 
 
-            if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() == true && p.isOp()) {
+            if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() && p.isOp()) {
 
-                p.sendMessage(ChatColor.GRAY + "You are now editing " + v.getCustomName());
+                p.sendMessage("");
+                p.sendMessage(ChatColor.GRAY + "You are now editing " + ChatColor.RED + v.getCustomName());
                 p.sendMessage("");
                 p.sendMessage(ChatColor.GRAY + "/message <message> - " + ChatColor.RED + "Sets the entities message.");
                 p.sendMessage(ChatColor.GRAY + "/item <item> - " + ChatColor.RED + "Set item to give.");
-
 
                 editing = true;
                 mobName = v.getCustomName();
