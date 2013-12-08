@@ -12,3 +12,6 @@ commands:
     item:
         description: Set mob item
         usage: /item <itemid>
+    remove:
+        description: Remove mob
+        usage: /remove <mobName>

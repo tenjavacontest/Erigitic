@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MobTalk extends JavaPlugin {
 
@@ -71,6 +74,7 @@ public class MobTalk extends JavaPlugin {
 
                 v.setCustomName(args[0]);
                 reader.writeMobMessage(args[0], "No message set", mobLoc);
+                reader.writeMobLoc(args[0], loc, mobLoc);
 
                 v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 999999, 128));
                 v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 999999, 6));
@@ -96,6 +100,34 @@ public class MobTalk extends JavaPlugin {
             if (args[0] != null) {
 
                 reader.writeMobItem(mtListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
+
+            }
+
+        } else if (cmdLabel.equalsIgnoreCase("remove")) {
+
+
+            if (args[0] != null) {
+
+                Location loc = reader.readMobLoc(args[0], mobLoc);
+                p.sendMessage("" + loc);
+                List<Entity> entityList = loc.getWorld().getEntities();
+
+                for (int i = 0; i < entityList.size(); i++) {
+
+                    if (entityList.get(i) instanceof Villager) {
+
+                        Villager v = (Villager) entityList.get(i);
+
+                        if (v.getCustomName().equalsIgnoreCase(args[0])) {
+
+                            v.remove();
+                            reader.removeMob(args[0], mobLoc);
+
+                        }
+
+                    }
+
+                }
 
             }
 
