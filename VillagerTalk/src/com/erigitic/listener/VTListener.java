@@ -51,7 +51,7 @@ public class VTListener implements Listener {
             mobName = v.getCustomName();
 
 
-            if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking() && p.isOp()) {
+            if (event.getRightClicked().getType() == EntityType.VILLAGER && v.getCustomName() != null && p.isSneaking()) {
 
                 p.sendMessage("");
                 p.sendMessage(ChatColor.GRAY + "You are now editing " + ChatColor.RED + v.getCustomName());
