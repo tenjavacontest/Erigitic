@@ -76,8 +76,8 @@ public class VillagerTalk extends JavaPlugin {
                 reader.writeMobMessage(args[0], "No message set", mobLoc);
                 reader.writeMobLoc(args[0], loc, mobLoc);
 
-                v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 999999, 128));
-                v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 999999, 6));
+                v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 99999999, 128));
+                v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 99999999, 6));
             } else {
 
                 p.sendMessage(ChatColor.RED + "The correct usage is /create <name>");
