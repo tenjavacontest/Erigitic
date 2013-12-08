@@ -68,6 +68,7 @@ public class VillagerTalk extends JavaPlugin {
         if (cmdLabel.equalsIgnoreCase("create")) {//Spawns mob. Will allow for sender to choose mob of choice
 
             if (args.length == 1) {
+                if (reader.mobExists(args[0], mobLoc) == false) {
                 Location loc = p.getLocation();
                 World world = loc.getWorld();
                 Villager v = world.spawn(loc, Villager.class);
@@ -78,6 +79,11 @@ public class VillagerTalk extends JavaPlugin {
 
                 v.addPotionEffect(new PotionEffect((PotionEffectType.JUMP), 99999999, 128));
                 v.addPotionEffect(new PotionEffect((PotionEffectType.SLOW), 99999999, 6));
+                } else {
+
+                    p.sendMessage(ChatColor.RED + "A Villager with that name already exists.");
+
+                }
             } else {
 
                 p.sendMessage(ChatColor.RED + "The correct usage is /create <name>");
@@ -152,7 +158,7 @@ public class VillagerTalk extends JavaPlugin {
 
                                 } else {
 
-                                    p.sendMessage(ChatColor.RED + "That mob does not exist.");
+                                    p.sendMessage(ChatColor.RED + "That Villager does not exist.");
 
                                 }
 
@@ -165,7 +171,7 @@ public class VillagerTalk extends JavaPlugin {
                 } else {
 
                     loc = null;
-                    p.sendMessage(ChatColor.RED + "That mob does not exist.");
+                    p.sendMessage(ChatColor.RED + "That Villager does not exist.");
 
                 }
 
