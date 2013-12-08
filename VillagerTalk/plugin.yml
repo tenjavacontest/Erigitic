@@ -5,7 +5,7 @@ version: 1.0.0
 commands:
     create:
         description: Create MobTalk mob
-        usage: /create
+        usage: /create <name>
     message:
         description: Set mob message
         usage: /message <message>
