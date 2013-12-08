@@ -86,32 +86,43 @@ public class VillagerTalk extends JavaPlugin {
 
         } else if (cmdLabel.equalsIgnoreCase("message")) {
 
-            if (args.length >= 1) {
-                String msg = args[0];
+            if (VTListener.getMobName() != null) {
+                if (args.length >= 1) {
+                    String msg = args[0];
 
-                for (int i = 1; i < args.length; i++) {
+                    for (int i = 1; i < args.length; i++) {
 
-                    msg += " " + args[i];
+                        msg += " " + args[i];
+
+                    }
+
+                    reader.writeMobMessage(VTListener.getMobName(), msg, mobLoc);
+
+                }  else {
+
+                    p.sendMessage(ChatColor.RED + "The correct usage is /message <message>");
 
                 }
+            } else {
 
-                reader.writeMobMessage(VTListener.getMobName(), msg, mobLoc);
-
-            }  else {
-
-                p.sendMessage(ChatColor.RED + "The correct usage is /message <message>");
+                p.sendMessage(ChatColor.RED + "Shift Right Click on the villager you want to edit first.");
 
             }
 
         } else if (cmdLabel.equalsIgnoreCase("item")) {
+            if (VTListener.getMobName() != null) {
+                if (args.length == 1) {
 
-            if (args.length == 1) {
+                    reader.writeMobItem(VTListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
 
-                reader.writeMobItem(VTListener.getMobName(), Material.getMaterial(args[0]), mobLoc);
+                }  else {
 
-            }  else {
+                    p.sendMessage(ChatColor.RED + "The correct usage is /item <item>.");
 
-                p.sendMessage(ChatColor.RED + "The correct usage is /item <item>.");
+                }
+            } else {
+
+                p.sendMessage(ChatColor.RED + "Shift Right Click on the villager you want to edit first.");
 
             }
 
@@ -119,23 +130,42 @@ public class VillagerTalk extends JavaPlugin {
 
             if (args.length == 1) {
 
-                Location loc = reader.readMobLoc(args[0], mobLoc);
-                List<Entity> entityList = loc.getWorld().getEntities();
+                Location loc;
 
-                for (int i = 0; i < entityList.size(); i++) {
+                if (reader.mobExists(args[0], mobLoc) == true) {
 
-                    if (entityList.get(i) instanceof Villager) {
+                    loc = reader.readMobLoc(args[0], mobLoc);
+                    List<Entity> entityList = loc.getWorld().getEntities();
 
-                        Villager v = (Villager) entityList.get(i);
+                    for (int i = 0; i < entityList.size(); i++) {
 
-                        if (v.getCustomName().equalsIgnoreCase(args[0])) {
+                        if (entityList.get(i) instanceof Villager) {
 
-                            v.remove();
-                            reader.removeMob(args[0], mobLoc);
+                            Villager v = (Villager) entityList.get(i);
+
+                            if (v.getCustomName().equalsIgnoreCase(args[0])) {
+
+                                if (reader.mobExists(args[0], mobLoc)) {
+
+                                    v.remove();
+                                    reader.removeMob(args[0], mobLoc);
+
+                                } else {
+
+                                    p.sendMessage(ChatColor.RED + "That mob does not exist.");
+
+                                }
+
+                            }
 
                         }
 
                     }
+
+                } else {
+
+                    loc = null;
+                    p.sendMessage(ChatColor.RED + "That mob does not exist.");
 
                 }
 
@@ -144,6 +174,8 @@ public class VillagerTalk extends JavaPlugin {
                 p.sendMessage(ChatColor.RED + "The correct usage is /remove <name>");
 
             }
+
+
 
         }
 

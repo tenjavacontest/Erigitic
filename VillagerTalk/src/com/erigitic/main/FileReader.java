@@ -160,4 +160,29 @@ public class FileReader {
 
     }
 
+    public boolean mobExists(String mobName, File file) {
+
+        Properties prop = new Properties();
+
+        try {
+
+            FileInputStream in = new FileInputStream(file);
+            prop.load(in);
+
+            if (prop.containsKey(mobName)) {
+
+                return true;
+            } else {
+
+                return false;
+            }
+
+        } catch (IOException e) {
+
+
+        }
+
+        return false;
+    }
+
 }
